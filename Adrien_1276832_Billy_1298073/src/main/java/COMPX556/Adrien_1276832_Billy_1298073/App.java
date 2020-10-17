@@ -36,8 +36,13 @@ public class App
     }
     
     
-    
-    
+    /*
+     * 1) Create Ant at start position using Map
+     * 2) Reading through map to figure out free location
+     * 3) Travelling through that random location
+     * 4) Save trails and positions that Ant has visited
+     * 5) Update best Solution of trail by length
+    */
     
     
     

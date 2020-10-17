@@ -14,86 +14,143 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
-	
+	//Provide excel file location
 	private static final String NAME = "../../10x10_Test_Template.xlsx";
+	//Initialise Variable
 	private static List<String> ant = new ArrayList<String>();
 	static BOX box;
 	static ArrayList<BOX> boxA = new ArrayList<BOX>();
+	static MAP map = new MAP(10,10);
 	public static void main(String[] args) {
 		try {
-			FileInputStream file = new FileInputStream(new File(NAME));
-			Workbook workbook = new XSSFWorkbook(file);
-			DataFormatter dataFormatter = new DataFormatter();
-			Iterator<Sheet> sheets = workbook.sheetIterator();
-			int r = 0;
-			int c = 0;
+			
+			FileInputStream file = new FileInputStream(new File(NAME)); //FileInputStream from excel file location
+			Workbook workbook = new XSSFWorkbook(file); //New Workbook
+			DataFormatter dataFormatter = new DataFormatter(); //New DataFormatter
+			Iterator<Sheet> sheets = workbook.sheetIterator(); //New Iterator to go through workbook sheet
+			map.initializeTable();
+			//While there's still data
 			while(sheets.hasNext()) {
+				//Go to next sheet
 				Sheet sh = sheets.next();
 				System.out.println("Sheet name is " + sh.getSheetName());
 				System.out.println("------");
+				//Iterator to go through sheet rows
 				Iterator<Row> iterator = sh.iterator();
+				//While there are still rows
 				while(iterator.hasNext()) {
+					//Go to next row
 					Row row = iterator.next();
-					r = r++;
+					//Iterator to go through row's column cells
 					Iterator<Cell> cellIterator = row.iterator();
+					//While there are still column
 					while (cellIterator.hasNext()) {
+						//Go to next column cell
 						Cell cell = cellIterator.next();
-						c = c++;
+						//Extract Cell value, row number & column number
 						String cellValue = dataFormatter.formatCellValue(cell);
-//						if(cell.getCellType() == CellType.STRING) {
-//						}
-						box = new BOX(cellValue, r, c);
+						int rowN = cell.getRowIndex();
+						int colN = cell.getColumnIndex();
+						//Create new box of extracted value, row number and column number
+						box = new BOX(cellValue, rowN, colN);
+						map.setTableValue(rowN, colN, cellValue);
+						//Add box to BOX Array
 						boxA.add(box);
+						//Add cell value to ant list
 						ant.add(cellValue);
+						//Print current cell value
 						System.out.print(cellValue+"\t");
 					}
 					System.out.println();
 				}
 			}
+			//Close Workbook
 			workbook.close();
-			for(int i=0;i<ant.size();i++){
-				System.out.print(ant.get(i));
-			}
-			System.out.println(ant);
+			//System.out.println(ant);
 		}
+		//Catch Error
 		catch(Exception error){
 			error.printStackTrace();
 		}
 	}
-	
+	//Return cellvalue list
 	public List<String> getList() {
 		main(null);
 		return ant;
 	}
-	
+	//Return BOX Array
 	public ArrayList<BOX> getBox() {
 		main(null);
 		return boxA;
 	}
+	
+	public MAP getMap() {
+		main(null);
+		return map;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+//BOX Class to store excel sheet's value, row and column number
 class BOX{
+	//Initialise Variable
 	private String value;
 	private int row;
 	private int column;
-	
+	//BOX constructor
 	public BOX(String v, int r, int c) {
 		this.value = v;
 		this.row = r;
 		this.column = c;
 	}
-	
+	//getValue of the Box value
 	public String getValue() {
 		return this.value;
 	}
-	
+	//getRow number of the box
 	public int getRow() {
 		return this.row;
 	}
-	
+	//getColumn number of the box
 	public int getColumn() {
 		return this.column;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+class MAP {
+	private int rowSize;
+	private int columnSize;
+	String[][] table;
+	//MAP constructor
+	public MAP(int rS, int cS) {
+		this.rowSize = rS;
+		this.columnSize = cS;
+		table = new String[rowSize][columnSize];
+	}
+	
+	public void initializeTable() {
+		for(int r = 0; r < table.length; r++){
+			for (int c = 0; c < table[r].length; c++){
+				table[r][c] = "0"; 
+			}
+		}
+	}
+	
+	public void setTableValue(int r, int c ,String value){
+		table[r][c] = value;
+	}
+
+	public String[][] getTable() {
+		return table;
+	}
+	
+	public void printMap() {
+		for(int r = 0; r < table.length; r++) {
+			for(int c = 0; c < table[r].length; c++) {
+				System.out.print(table[r][c] + " ");
+			}
+			System.out.println();
+		}
 	}
 }

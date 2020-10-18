@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 	//Provide excel file location
-	private static final String NAME = "../../10x10_Test_Template.xlsx";
+	private static final String NAME = "10x10_Test_Template.xlsx";
 	//Initialise Variable
 	private static List<String> ant = new ArrayList<String>();
 	static BOX box;
@@ -140,7 +140,10 @@ class MAP {
 	public void setTableValue(int r, int c ,String value){
 		table[r][c] = value;
 	}
-
+	
+	public String getTableValue(int r, int c) {
+		return table[r][c];
+	}
 	public String[][] getTable() {
 		return table;
 	}

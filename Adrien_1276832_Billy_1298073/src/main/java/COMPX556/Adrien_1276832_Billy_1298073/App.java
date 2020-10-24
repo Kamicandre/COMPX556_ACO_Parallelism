@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Hello world!
- *
- */
 public class App implements Runnable
 {
-	private static int maxR = 30;
-	private static int maxC = 30;
+	private static int maxR = 10;
+	private static int maxC = 10;
 	private static ExcelReader ExcelRead = new ExcelReader();
 	private static MAP Map = ExcelRead.getMap();
 	private static Ant a1;
@@ -25,30 +21,12 @@ public class App implements Runnable
 	private static Ant a9;
 	private static Ant a10;
 	private static Ant bestAnt;
-	//private static boolean[][] visit = new boolean[maxR][maxC];
+	
 	private static boolean[][] deads = new boolean[maxR][maxC];
-	//private static boolean[][] revisited = new boolean[maxR][maxC];
 	private static int[][] phero = new int[maxR][maxC];
+	
 	private static ArrayList<Ant> antList = new ArrayList<Ant>();
-	public static void test() {
-		ExcelRead = new ExcelReader();
-		List<String> test1 = ExcelRead.getList();
-        System.out.print(test1);
-		for(int i=0;i<test1.size();i++) {
-			System.out.print(test1.get(i));
-		}
-	}
-	public static void boxRead() {
-		ExcelRead = new ExcelReader();
-		ArrayList<BOX> test2 = ExcelRead.getBox();
-        //System.out.print(test2);
-		for(int i=0;i<test2.size();i++) {
-		}
-	}
-   
 
-
-    
 	//Finding "s" in the Map
 	public static Position findStart(){
 		String[][] grid = Map.getTable();
@@ -109,17 +87,12 @@ public class App implements Runnable
     
     public static void AntTravel(Ant ant, String[][] grid) {
 		Position curr = ant.getPosition();
-		//System.out.println("Starting new ant ---------------------------------------------------------------------------------------");
-		//System.out.println("Start pos :" + curr.getRow() + ", " + curr.getCol());
 		Position end = findEnd();
-		//System.out.println("End pos :" + end.getRow() + ", " + end.getCol());
 		//While reaching end of the position
 		while(grid[curr.getRow()][curr.getCol()] != grid[end.getRow()][end.getCol()]){
 			//Should move ant to a random free location.
     		curr = ant.movement(curr.getRow(),curr.getCol(),grid,end);			
-			//System.out.println("Ants current poisition after movement is :" + curr.getRow() + ", " + curr.getCol());
 		}
-		//System.out.println("Reached end goal");
     }
     
     public static void massTravel() {
@@ -178,7 +151,6 @@ public class App implements Runnable
     
     public static void printTrails(Ant ant, String[][] grid) {
     	ArrayList<Position> trail = ant.getTrails();
-    	//String[][] test = grid; // Problem here, its not copying it, merely add a reference to it
     	String[][] test = new String[grid.length][];
     	for(int i = 0; i < test.length; i++) {
     		test[i] = new String[grid[i].length];
@@ -202,17 +174,9 @@ public class App implements Runnable
 			}
 			System.out.println();
 		}
-//    	for(int r = 0; r < table.length; r++) {
-//			for(int c = 0; c < table[r].length; c++) {
-//				System.out.print(table[r][c] + " ");
-//			}
-//			System.out.println();
-//		}
     }
     
     public static void bestTrails() {
-    	//Search through the ArrayList<Ant> antList to find which ant.getTrails has the smallest size
-    	//Set minTrail Size to the first ant trail size in antList
     	int minTrailSize = antList.get(0).getTrails().size();
     	int minIndex = 0;
     	//Go through antList trails
@@ -240,8 +204,6 @@ public class App implements Runnable
 	public static void main()
     {
 		massTravel();
-//		System.out.println("A1 trails:");
-//		printTrails(a1, Map.getTable());
 		System.out.println("A1 trails count: " + a1.getTrails().size() + 
 							" A2 trails count: " + a2.getTrails().size() + 
 							" A3 trails count: " + a3.getTrails().size() + 
@@ -304,14 +266,6 @@ class Ant{
 	public ArrayList<Position> getTrails(){
 		return trails;
 	}
-	/*
-	public void getPheromoneMap(int r , int c, int[][] phero){
-		for(int row = 0; row < r; row++){
-			for(int col = 0; col < col; col++){
-				pheromone[r][c] = phero[r][c];
-			}
-		}
-	}*/
 
 
 	public Position movement(int r, int c, String[][] mapTable, Position end){
@@ -321,17 +275,13 @@ class Ant{
 			//Position marker to switch current and previous position.
 			ArrayList<Position> freeM = onlyPath(currentPos.getRow(), currentPos.getCol(), mapTable);
 			Position temp = randomMove(freeM);
-			//CHANGE THIS.
 			Deadends.add(currentPos);
 			dead[currentPos.getRow()][currentPos.getCol()] = true;
 			Pheromone(currentPos.getRow(), currentPos.getCol());
-			//System.out.println("Gay loop");
 			visitedPos(currentPos);
 			prevPos = currentPos;
-			//visitedPos(prevPos);
 			currentPos = temp;
 			revisited[currentPos.getRow()][currentPos.getCol()] = true;
-			//System.out.println("Position stuck in : " + currentPos.getRow() + ","+ currentPos.getCol());
 			return currentPos;
 		}else{
 			Position nextPos = randomMove(freeLoc);
@@ -339,14 +289,12 @@ class Ant{
 				revisited[nextPos.getRow()][nextPos.getCol()] = true;
 			}
 			if(mapTable[nextPos.getRow()][nextPos.getCol()] == mapTable[prevPos.getRow()][prevPos.getCol()]){
-				//System.out.println("Before movment Position is " + currentPos.getRow() + " , " + currentPos.getCol());
 				prevPos = currentPos;
 				Pheromone(currentPos.getRow(), currentPos.getCol());
 				visitedPos(currentPos);
 				currentPos = nextPos;
 				return currentPos;
 			}else{
-				//System.out.println("Before movment Position is " + currentPos.getRow() + " , " + currentPos.getCol());
 				prevPos = currentPos;
 				visitedPos(currentPos);
 				currentPos = nextPos;
@@ -380,7 +328,6 @@ class Ant{
 	public ArrayList<Position> onlyPath(int r, int c, String[][] mapTable){
 		String [][] grid = mapTable;
 		String free = "0";
-		//System.out.println("Searching for path");
 		ArrayList<Position> freeLoc = new ArrayList<Position>();
 		//Return first value thats available free to move.
 		if(r != 0){
@@ -416,17 +363,14 @@ class Ant{
 		ArrayList<Position> freeLoc = new ArrayList<Position>();
 		ArrayList<Position> endLoc = new ArrayList<Position>();
 		ArrayList<Integer> prior = new ArrayList<Integer>();
-		//ArrayList<Integer> minPrior = new ArrayList<Integer>();
 		prior.add(3);
 		prior.add(3);
 		prior.add(3);
 		prior.add(3);
-		//System.out.println("Current position is " + r + " ," + c);
 		String free = "0";
 		String end = "e";
 		Integer rowVal = endPos.getRow() - r;
 		Integer colVal = endPos.getCol() - c;
-		//System.out.println("Row and col is " + rowVal + ", " + colVal);
 		int upPrior = 0;
 		int downPrior = 0;
 		int leftPrior = 0;
@@ -448,8 +392,6 @@ class Ant{
 		}else{
 			isLeft = true;
 		}
-		//System.out.println("Up and Left is " + isUp + ", " + isLeft);
-		//System.out.println("Prior array: " + prior);
 		//Check up
 		if (r != 0) {
 			//Check if this option is dead end
@@ -460,14 +402,8 @@ class Ant{
 					endLoc.add(posUp);
 					return endLoc;
 				}
-				/*Get the prior from the pheromone count
-				  Get the min, and 2nd min and 3rd min
-				  Sort them in an array from the min to the highest
-				  */
 				else if (grid[r-1][c].equals(free)) {
 					upFree = true;
-					//upPrior = pheromone[r-1][c];
-					//prior.set(0, upPrior);
 					//Check if the free position was visited previously
 					if (visited[r-1][c] != true){
 						upPrior = pheromone[r-1][c];
@@ -486,7 +422,6 @@ class Ant{
 		if(r < maxR-1) {
 			//Check if this option is dead end
 			if(dead[r+1][c] != true){
-				
 				if(grid[r+1][c].equals(end)) {
 					Position posDown= new Position(r+1, c);
 					endLoc.add(posDown);
@@ -494,8 +429,6 @@ class Ant{
 				}
 				else if (grid[r+1][c].equals(free)) {
 					downFree = true;
-					//downPrior = pheromone[r+1][c];
-					//prior.set(1, downPrior);
 					//Check if the free position was visited previously
 					if (visited[r+1][c] != true){
 						downPrior = pheromone[r+1][c];
@@ -522,8 +455,6 @@ class Ant{
 				}
 				else if (grid[r][c-1].equals(free)) {
 					leftFree = true;
-					//leftPrior = pheromone[r][c-1];
-					//prior.set(2, leftPrior);
 					//Check if the free position was visited previously
 					if (visited[r][c-1] != true){
 						leftPrior = pheromone[r][c-1];
@@ -550,8 +481,6 @@ class Ant{
 				}
 				else if (grid[r][c+1].equals(free)) {
 					rightFree = true;
-					//rightPrior = pheromone[r][c+1];
-					//prior.set(3, rightPrior);
 					//Check if the free position was visited previously
 					if (visited[r][c+1] != true){
 						rightPrior = pheromone[r][c+1];
@@ -567,7 +496,6 @@ class Ant{
 				
 			}
 		}
-		//System.out.println("Prior array: " + prior.get(0) + ", "+ prior.get(1)+ ", "+prior.get(2)+ ", "+prior.get(3));
 	
 		//USING PHERO TO CHECK IF BEST POISITION TO MOVE.
 		///////////Check if correct direction is free///////////////
@@ -575,25 +503,21 @@ class Ant{
 		if(upFree == true && isUp == true && prior.get(0) == 0){
 			Position posUp = new Position(r-1, c);
 			freeLoc.add(posUp);
-			//System.out.println("Up is: " + posUp.getRow() + ", " + posUp.getCol());
 		}
 		//Check Down and if up is blocked
 		if(downFree == true && isUp == false && prior.get(1) == 0) {
 			Position posDown = new Position(r+1 , c);
 			freeLoc.add(posDown);
-			//System.out.println("Down is: " + posDown.getRow() + ", " + posDown.getCol());
 		} 
 		//Check Left and if right is blocked
 		if(leftFree == true && isLeft == true && prior.get(2) == 0) {
 			Position posLeft = new Position(r, c-1);
 			freeLoc.add(posLeft);
-			//System.out.println("Left is: " + posLeft.getRow() + ", " + posLeft.getCol());
 		}
 		//Check right and if left is blocked.
 		if(rightFree == true && isLeft == false && prior.get(3) == 0) {
 			Position posRight = new Position(r, c+1);
 			freeLoc.add(posRight);
-			//System.out.println("Right is: " + posRight.getRow() + ", " + posRight.getCol());
 		}
 		//CHECKING PRIORITY
 		if(freeLoc.size() == 0){
@@ -609,33 +533,28 @@ class Ant{
 					minIndex = i;
 				}
 			}
-			//System.out.println("New Priority");
 			if(best.contains(0) && r != 0){
 				if(dead[r-1][c] != true && upFree == true ) {
 					Position posUp = new Position(r-1, c);
 					freeLoc.add(posUp);
-					//System.out.println("UpPrior is: " + posUp.getRow() + ", " + posUp.getCol());
 				}
 			}
 			if(best.contains(1) && r < maxR-1){
 				if(downFree == true && dead[r+1][c] != true) {
 					Position posDown = new Position(r+1, c);
 					freeLoc.add(posDown);
-					//System.out.println("DownPrior is: " + posDown.getRow() + ", " + posDown.getCol());
 				}
 			}
 			if(best.contains(2) && c != 0){
 				if(leftFree == true && dead[r][c-1] != true) {
 					Position posLeft = new Position(r, c-1);
 					freeLoc.add(posLeft);
-					//System.out.println("LeftPrior is: " + posLeft.getRow() + ", " + posLeft.getCol());
 				}
 			}
 			if(best.contains(3) && c < maxC-1){
 				if(rightFree == true && dead[r][c+1] != true) {
 					Position posRight = new Position(r, c+1);
 					freeLoc.add(posRight);
-					//System.out.println("RightPrior is: " + posRight.getRow() + ", " + posRight.getCol());
 				}
 			}
 		}

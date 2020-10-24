@@ -15,9 +15,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 	//Provide excel file location
-	private static final String NAME = "30x30_Test_Template.xlsx";
-	private static int maxR = 30;
-	private static int maxC = 30;
+	private static final String NAME = "10x10_Test_Template.xlsx";
+	private static int maxR = 10;
+	private static int maxC = 10;
 	//Initialise Variable
 	private static List<String> ant = new ArrayList<String>();
 	static BOX box;
@@ -25,7 +25,6 @@ public class ExcelReader {
 	static MAP map = new MAP(maxR,maxC);
 	public static void main(String[] args) {
 		try {
-			
 			FileInputStream file = new FileInputStream(new File(NAME)); //FileInputStream from excel file location
 			Workbook workbook = new XSSFWorkbook(file); //New Workbook
 			DataFormatter dataFormatter = new DataFormatter(); //New DataFormatter
@@ -84,7 +83,7 @@ public class ExcelReader {
 		main(null);
 		return boxA;
 	}
-	
+	//Return Map Class object
 	public MAP getMap() {
 		main(null);
 		return map;
@@ -130,6 +129,7 @@ class MAP {
 		table = new String[rowSize][columnSize];
 	}
 	
+	//Initialise String[][] table with 0s
 	public void initializeTable() {
 		for(int r = 0; r < table.length; r++){
 			for (int c = 0; c < table[r].length; c++){
@@ -138,17 +138,19 @@ class MAP {
 		}
 	}
 	
+	//Set a value in String[][]
 	public void setTableValue(int r, int c ,String value){
 		table[r][c] = value;
 	}
-	
+	//Get a value in String[][]
 	public String getTableValue(int r, int c) {
 		return table[r][c];
 	}
+	//Return a 2d array of String[][]
 	public String[][] getTable() {
 		return table;
 	}
-	
+	//Prints out the String[][] to console
 	public void printMap() {
 		for(int r = 0; r < table.length; r++) {
 			for(int c = 0; c < table[r].length; c++) {

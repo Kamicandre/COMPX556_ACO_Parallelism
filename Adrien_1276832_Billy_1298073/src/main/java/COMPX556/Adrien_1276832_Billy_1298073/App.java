@@ -130,47 +130,47 @@ public class App implements Runnable
 		AntTravel(a1, Map.getTable());
 		a1.evaporate(maxR,maxC);
 		
-		a2 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a2 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a1.getPheromone());
 		antList.add(a2);
 		AntTravel(a2, Map.getTable());
 		a2.evaporate(maxR,maxC);
 		
-		a3 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a3 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a2.getPheromone());
 		antList.add(a3);
 		AntTravel(a3, Map.getTable());
 		a3.evaporate(maxR,maxC);
 		
-		a4 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a4 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a3.getPheromone());
 		antList.add(a4);
 		AntTravel(a4, Map.getTable());
 		a4.evaporate(maxR,maxC);
 		
-		a5 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a5 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a4.getPheromone());
 		antList.add(a5);
 		AntTravel(a5, Map.getTable());
 		a5.evaporate(maxR,maxC);
 		
-		a6 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a6 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a5.getPheromone());
 		antList.add(a6);
 		AntTravel(a6, Map.getTable());
 		a6.evaporate(maxR,maxC);
 		
-		a7 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a7 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a6.getPheromone());
 		antList.add(a7);
 		AntTravel(a7, Map.getTable());
 		a7.evaporate(maxR,maxC);
 		
-		a8 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a8 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a7.getPheromone());
 		antList.add(a8);
 		AntTravel(a8, Map.getTable());
 		a8.evaporate(maxR,maxC);
 		
-		a9 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a9 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a8.getPheromone());
 		antList.add(a9);
 		AntTravel(a9, Map.getTable());
 		a9.evaporate(maxR,maxC);
 		
-		a10 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+		a10 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a9.getPheromone());
 		antList.add(a10);
 		AntTravel(a10, Map.getTable());
 		a10.evaporate(maxR,maxC);
@@ -198,7 +198,7 @@ public class App implements Runnable
     	}
     	for(int r = 0; r < test.length; r++) {
 			for(int c = 0; c < test[r].length; c++) {
-				System.out.print(test[r][c] + "\t");
+				System.out.print(test[r][c] + " ");
 			}
 			System.out.println();
 		}
@@ -274,7 +274,7 @@ class Ant{
 	private static int maxR;
 	private static int maxC;
 
-	public Ant(int startR, int startC , int endr, int endc , int mR, int mC, boolean[][] visit, boolean[][] deads, boolean[][] revisited , int[][] phero){
+	public Ant(int startR, int startC , int endr, int endc , int mR, int mC, boolean[][] visit, boolean[][] deads, boolean[][] revisited, int[][] phero){
 		this.currentPos = new Position(startR, startC);
 		this.prevPos = new Position(startR, startC);
 		this.endGoal = new Position(endr, endc);
@@ -285,6 +285,10 @@ class Ant{
 		this.revisited = revisited;
 		this.pheromone = phero;
 		pheromone[startR][startC] = 1;
+	}
+	
+	public int[][] getPheromone() {
+		return pheromone;
 	}
 
 	public void visitedPos(Position pos){
@@ -322,8 +326,9 @@ class Ant{
 			dead[currentPos.getRow()][currentPos.getCol()] = true;
 			Pheromone(currentPos.getRow(), currentPos.getCol());
 			//System.out.println("Gay loop");
+			visitedPos(currentPos);
 			prevPos = currentPos;
-			visitedPos(prevPos);
+			//visitedPos(prevPos);
 			currentPos = temp;
 			revisited[currentPos.getRow()][currentPos.getCol()] = true;
 			//System.out.println("Position stuck in : " + currentPos.getRow() + ","+ currentPos.getCol());
@@ -605,29 +610,29 @@ class Ant{
 				}
 			}
 			//System.out.println("New Priority");
-			if(best.contains(0)){
-				if(r != 0 && upFree == true) {
+			if(best.contains(0) && r != 0){
+				if(dead[r-1][c] != true && upFree == true ) {
 					Position posUp = new Position(r-1, c);
 					freeLoc.add(posUp);
 					//System.out.println("UpPrior is: " + posUp.getRow() + ", " + posUp.getCol());
 				}
 			}
-			if(best.contains(1)){
-				if(r < maxR-1 && downFree == true) {
+			if(best.contains(1) && r < maxR-1){
+				if(downFree == true && dead[r+1][c] != true) {
 					Position posDown = new Position(r+1, c);
 					freeLoc.add(posDown);
 					//System.out.println("DownPrior is: " + posDown.getRow() + ", " + posDown.getCol());
 				}
 			}
-			if(best.contains(2)){
-				if(c != 0 && leftFree == true) {
+			if(best.contains(2) && c != 0){
+				if(leftFree == true && dead[r][c-1] != true) {
 					Position posLeft = new Position(r, c-1);
 					freeLoc.add(posLeft);
 					//System.out.println("LeftPrior is: " + posLeft.getRow() + ", " + posLeft.getCol());
 				}
 			}
-			if(best.contains(3)){
-				if(c < maxC-1 && rightFree == true) {
+			if(best.contains(3) && c < maxC-1){
+				if(rightFree == true && dead[r][c+1] != true) {
 					Position posRight = new Position(r, c+1);
 					freeLoc.add(posRight);
 					//System.out.println("RightPrior is: " + posRight.getRow() + ", " + posRight.getCol());

@@ -60,7 +60,7 @@ public class ExcelReader {
 						//Add cell value to ant list
 						ant.add(cellValue);
 						//Print current cell value
-						System.out.print(cellValue+"\t");
+						System.out.print(cellValue+" ");
 					}
 					System.out.println();
 				}

@@ -15,9 +15,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 	//Provide excel file location
-	private static final String NAME = "20x20_Test_Template.xlsx";
-	private static int maxR = 20;
-	private static int maxC = 20;
+	private static final String NAME = "30x30_Test_Template.xlsx";
+	private static int maxR = 30;
+	private static int maxC = 30;
 	//Initialise Variable
 	private static List<String> ant = new ArrayList<String>();
 	static BOX box;

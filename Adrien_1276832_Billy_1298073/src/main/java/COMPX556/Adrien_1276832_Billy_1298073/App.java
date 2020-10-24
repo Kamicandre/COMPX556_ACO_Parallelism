@@ -10,8 +10,8 @@ import java.util.Random;
  */
 public class App implements Runnable
 {
-	private static int maxR = 20;
-	private static int maxC = 20;
+	private static int maxR = 30;
+	private static int maxC = 30;
 	private static ExcelReader ExcelRead = new ExcelReader();
 	private static MAP Map = ExcelRead.getMap();
 	private static Ant a1;
@@ -25,9 +25,9 @@ public class App implements Runnable
 	private static Ant a9;
 	private static Ant a10;
 	private static Ant bestAnt;
-	private static boolean[][] visit = new boolean[maxR][maxC];
+	//private static boolean[][] visit = new boolean[maxR][maxC];
 	private static boolean[][] deads = new boolean[maxR][maxC];
-	private static boolean[][] revisited = new boolean[maxR][maxC];
+	//private static boolean[][] revisited = new boolean[maxR][maxC];
 	private static int[][] phero = new int[maxR][maxC];
 	private static ArrayList<Ant> antList = new ArrayList<Ant>();
 	public static void test() {
@@ -125,52 +125,52 @@ public class App implements Runnable
     public static void massTravel() {
 		Position start = findStart();
 		Position end = findEnd();
-    	a1 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, phero);
+    	a1 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, phero);
 		antList.add(a1);
 		AntTravel(a1, Map.getTable());
 		a1.evaporate(maxR,maxC);
 		
-		a2 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a1.getPheromone());
+		a2 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a1.getPheromone());
 		antList.add(a2);
 		AntTravel(a2, Map.getTable());
 		a2.evaporate(maxR,maxC);
 		
-		a3 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a2.getPheromone());
+		a3 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a2.getPheromone());
 		antList.add(a3);
 		AntTravel(a3, Map.getTable());
 		a3.evaporate(maxR,maxC);
 		
-		a4 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a3.getPheromone());
+		a4 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a3.getPheromone());
 		antList.add(a4);
 		AntTravel(a4, Map.getTable());
 		a4.evaporate(maxR,maxC);
 		
-		a5 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a4.getPheromone());
+		a5 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a4.getPheromone());
 		antList.add(a5);
 		AntTravel(a5, Map.getTable());
 		a5.evaporate(maxR,maxC);
 		
-		a6 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a5.getPheromone());
+		a6 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a5.getPheromone());
 		antList.add(a6);
 		AntTravel(a6, Map.getTable());
 		a6.evaporate(maxR,maxC);
 		
-		a7 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a6.getPheromone());
+		a7 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a6.getPheromone());
 		antList.add(a7);
 		AntTravel(a7, Map.getTable());
 		a7.evaporate(maxR,maxC);
 		
-		a8 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a7.getPheromone());
+		a8 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a7.getPheromone());
 		antList.add(a8);
 		AntTravel(a8, Map.getTable());
 		a8.evaporate(maxR,maxC);
 		
-		a9 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a8.getPheromone());
+		a9 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a8.getPheromone());
 		antList.add(a9);
 		AntTravel(a9, Map.getTable());
 		a9.evaporate(maxR,maxC);
 		
-		a10 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, visit,deads,revisited, a9.getPheromone());
+		a10 = new Ant(start.getRow(),start.getCol(),end.getRow(), end.getCol(), maxR, maxC, deads, a9.getPheromone());
 		antList.add(a10);
 		AntTravel(a10, Map.getTable());
 		a10.evaporate(maxR,maxC);
@@ -274,15 +274,15 @@ class Ant{
 	private static int maxR;
 	private static int maxC;
 
-	public Ant(int startR, int startC , int endr, int endc , int mR, int mC, boolean[][] visit, boolean[][] deads, boolean[][] revisited, int[][] phero){
+	public Ant(int startR, int startC , int endr, int endc , int mR, int mC, boolean[][] deads, int[][] phero){
 		this.currentPos = new Position(startR, startC);
 		this.prevPos = new Position(startR, startC);
 		this.endGoal = new Position(endr, endc);
 		this.maxR = mR;
 		this.maxC = mC;
-		this.visited = visit;
+		this.visited = new boolean[maxR][maxC];
 		this.dead = deads;
-		this.revisited = revisited;
+		this.revisited = new boolean[maxR][maxC];
 		this.pheromone = phero;
 		pheromone[startR][startC] = 1;
 	}
@@ -304,14 +304,14 @@ class Ant{
 	public ArrayList<Position> getTrails(){
 		return trails;
 	}
+	/*
 	public void getPheromoneMap(int r , int c, int[][] phero){
 		for(int row = 0; row < r; row++){
 			for(int col = 0; col < col; col++){
 				pheromone[r][c] = phero[r][c];
 			}
 		}
-	}
-
+	}*/
 
 
 	public Position movement(int r, int c, String[][] mapTable, Position end){

@@ -15,12 +15,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelReader {
 	//Provide excel file location
-	private static final String NAME = "10x10_Test_Template.xlsx";
+	private static final String NAME = "20x20_Test_Template.xlsx";
+	private static int maxR = 20;
+	private static int maxC = 20;
 	//Initialise Variable
 	private static List<String> ant = new ArrayList<String>();
 	static BOX box;
 	static ArrayList<BOX> boxA = new ArrayList<BOX>();
-	static MAP map = new MAP(10,10);
+	static MAP map = new MAP(maxR,maxC);
 	public static void main(String[] args) {
 		try {
 			
@@ -33,8 +35,7 @@ public class ExcelReader {
 			while(sheets.hasNext()) {
 				//Go to next sheet
 				Sheet sh = sheets.next();
-				System.out.println("Sheet name is " + sh.getSheetName());
-				System.out.println("------");
+				System.out.println("Original Map");
 				//Iterator to go through sheet rows
 				Iterator<Row> iterator = sh.iterator();
 				//While there are still rows
